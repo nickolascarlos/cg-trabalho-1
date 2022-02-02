@@ -2,9 +2,7 @@
 #include<GL/glut.h>
 #include<math.h>
  
-void drawCircle(float j) {
-    // Define a cor do círculo
-    glColor3f(0.5 - j/40, j/40, 0.0);
+void drawCircle() {
     glBegin(GL_POLYGON);
     for (float i = 0; i < 6.29; i += 0.001)
     {
@@ -46,11 +44,13 @@ void drawRect(float a, float b) {
     glEnd();
 }
 
-// Faz as configurações iniciais
-void init () {
+void myInit (void)
+{
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glColor3f(1.0, 1.0, 0.0);
+    glColor3f(0.0, 1.0, 0.0);
     glPointSize(1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     gluOrtho2D(-780, 780, -420, 420);
 }
  
@@ -58,9 +58,10 @@ void init () {
 // Contém a lógica das animações
 void display (void)
 {   
+    glScalef(1.5,1.5,1.0);
+    
     float dir = 1; // Variável de controle do sentido da animação
 
-    float j = 0;
     for (float j = 0;;j+=0.05*dir) {
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -77,7 +78,7 @@ void display (void)
         // Redimensiona o círculo
         glScalef(j,j,1.0);
         // Desenha um círculo de raio j
-        drawCircle(j);
+        drawCircle();
         // Limpa as tranformações
         glLoadIdentity();
 
@@ -112,25 +113,11 @@ void display (void)
 int main (int argc, char** argv)
 {
     glutInit(&argc, argv);
-     
-    // Define o tamanho da janela
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(1360*0.5, 768*0.5);
-     
-    // Define o canto superior esquerdo
-    // como ponto (0, 0)
     glutInitWindowPosition(0, 0);
- 
-    // Cria a janela
-    glutCreateWindow("Animacoes");
- 
-    // Inicializa
-    init();
-
-    // Define a função display
-    // como a função para desenhar
-    // na tela
+    glutCreateWindow("Animacao");
+    myInit();
     glutDisplayFunc(display);
-
-    // Chama o loop principal
     glutMainLoop();
 }
